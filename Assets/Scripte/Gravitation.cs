@@ -6,36 +6,44 @@ public class Gravitation : MonoBehaviour
     public static List<Gravitation> otherObjects;
     private Rigidbody rb;
     const float G = 0.006673f;
+
+    public bool planet = false;
+    public int orbitSpeed = 1000;
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        if (otherObjects == null)  // เช็คว่าวัตถุมี class Gravitation หรือไม่
+        if (otherObjects == null)  // ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝัต๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ class Gravitation ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
         { 
-            otherObjects = new List<Gravitation>(); // สร้าง List ใหม่เพื่อเก็บ Gravitation
+            otherObjects = new List<Gravitation>(); // ๏ฟฝ๏ฟฝ๏ฟฝาง List ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Gravitation
         }
-        otherObjects.Add(this); // ใส่วัตถุที่มี Gravitation เข้าไปใน List รายชื่อ
+        otherObjects.Add(this); // ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝัต๏ฟฝุท๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Gravitation ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ List ๏ฟฝ๏ฟฝยช๏ฟฝ๏ฟฝ๏ฟฝ
+
+        if (!planet)
+        {
+            rb.AddForce(Vector3.left * orbitSpeed); 
+        }
     }
     void FixedUpdate()
     {
         foreach (Gravitation obj in otherObjects)
         {
-            if (obj != this) // เช็คว่าต้องไม่ใช่วัตถุตนเอง เพื่อไม่ให้เกิดแรงดึงดูดตนเอง
+            if (obj != this) // ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาต๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝัต๏ฟฝุต๏ฟฝ๏ฟฝอง ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝิด๏ฟฝรง๏ฟฝึง๏ฟฝูด๏ฟฝ๏ฟฝ๏ฟฝอง
             {
-                AttractionForce(obj); // เรียก Method เพื่อใส่แรงดึงดูดหลังคำนวณ
+                AttractionForce(obj); // ๏ฟฝ๏ฟฝ๏ฟฝยก Method ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝรง๏ฟฝึง๏ฟฝูด๏ฟฝ๏ฟฝัง๏ฟฝำนวณ
             }
         }
     }
     void AttractionForce(Gravitation other)
     {
-        Rigidbody otherRb = other.rb; // ดึง Rigidbody ของอีกวัตถุเพื่อใช้ค่า m2
-        Vector3 direction = rb.position - otherRb.position; // หาทิศทางว่าอีกวัตถุอยู่ทิศทางไหน
+        Rigidbody otherRb = other.rb; // ๏ฟฝึง Rigidbody ๏ฟฝอง๏ฟฝีก๏ฟฝัต๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ m2
+        Vector3 direction = rb.position - otherRb.position; // ๏ฟฝาท๏ฟฝศทาง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝีก๏ฟฝัต๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝศทาง๏ฟฝหน
 
-        float distance = direction.magnitude; // หาระยะห่างระหว่างวัตถุจาก Vector Direction ( ค่า r )
-        if (distance == 0f) return; // หากวัตถุอยู่ในตำแหน่งที่ซ้อนกัน ไม่ต้องมีแรงดึงดูดอีก
+        float distance = direction.magnitude; // ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาง๏ฟฝัต๏ฟฝุจาก Vector Direction ( ๏ฟฝ๏ฟฝ๏ฟฝ r )
+        if (distance == 0f) return; // ๏ฟฝาก๏ฟฝัต๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝในต๏ฟฝ๏ฟฝหน่งท๏ฟฝ๏ฟฝ๏ฟฝอน๏ฟฝัน ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝรง๏ฟฝึง๏ฟฝูด๏ฟฝีก
 
-        // สูตรแรงดึงดูด G = (m1 * m2) / r^2
+        // ๏ฟฝูต๏ฟฝ๏ฟฝรง๏ฟฝึง๏ฟฝูด G = (m1 * m2) / r^2
         float forceMagnitude = G * ((rb.mass * otherRb.mass) / Mathf.Pow(distance, 2));
-        Vector3 gravitionalForce = forceMagnitude * direction.normalized; // รวมแรงและทิศทางเพื่อขยับวัตถุตามแรงดึงดูด
-        otherRb.AddForce(gravitionalForce); // ใส่แรงดึงดูดให้กับวัตถุอื่น
+        Vector3 gravitionalForce = forceMagnitude * direction.normalized; // ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝรง๏ฟฝ๏ฟฝะท๏ฟฝศทาง๏ฟฝ๏ฟฝ๏ฟฝอข๏ฟฝับ๏ฟฝัต๏ฟฝุต๏ฟฝ๏ฟฝ๏ฟฝรง๏ฟฝึง๏ฟฝูด
+        otherRb.AddForce(gravitionalForce); // ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝรง๏ฟฝึง๏ฟฝูด๏ฟฝ๏ฟฝ๏ฟฝับ๏ฟฝัต๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ
     }
 }
